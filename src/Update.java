@@ -5,7 +5,7 @@ import java.sql.Statement;
 import java.util.Scanner;
 
 public class Update {
-    public Scanner sc;
+    public static Scanner sc;
     public static SelectRecords s;
     private Connection connect() {
         Connection conn = null;
@@ -128,24 +128,71 @@ public class Update {
         }
     }
 
-    public static void update_reservation()
-    {
+    public static void update_reservation(){
+        s=new SelectRecords();
 
+        System.out.println("Donnez le num de la reservation que vous voulez modifier:");
+        sc=new Scanner(System.in);
+        int i=sc.nextInt();
+        while(i<0||i>s.selectMax("id_reservation","reservation")){
+            System.out.println("Reservation inexistatnte\nDonnez le num de la reservation que vous voulez modifier:");
+            i=sc.nextInt();
+        }
     }
 
-    public static void delete_reservation()
+    public void delete_reservation()
     {
         s=new SelectRecords();
-        
-        System.out.println("Donnez le num de la reservation que vous voulez eliminer:");
 
-        String sql = "DELETE FROM Reservation WHERE id_reservation = ?";
+        System.out.println("Donnez le num de la reservation que vous voulez eliminer:");
+        sc=new Scanner(System.in);
+        int i=sc.nextInt();
+        while(i<0||i>s.selectMax("id_reservation","reservation")){
+            System.out.println("Reservation inexistatnte\nDonnez le num de la reservation que vous voulez eliminer:");
+            i=sc.nextInt();
+        }
+        String sql = "DELETE FROM Reservation WHERE id_reservation = "+i;
+
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+
+
+            // loop through the result set
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
     }
 
-    public static void delete_client()
+    public void delete_client()
     {
+        s=new SelectRecords();
 
+        System.out.println("Donnez le num du client a eliminer:");
+        sc=new Scanner(System.in);
+        int i=sc.nextInt();
+        while(i<0||i>s.selectMax("id_client","client")){
+            System.out.println("client inexistatnte\nDonnez le num du client que vous voulez eliminer:");
+            i=sc.nextInt();
+        }
+        String sql = "DELETE FROM Reservation WHERE id_reservation = "+i;
+
+        try {
+            Connection conn = this.connect();
+            Statement stmt = conn.createStatement();
+            stmt.executeUpdate(sql);
+
+
+            // loop through the result set
+
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
     public static void main(String args[]){
         Update p=new Update();
