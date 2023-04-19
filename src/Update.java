@@ -2,12 +2,14 @@ import java.sql.DriverManager;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.ParseException;
 import java.util.Scanner;
 
 public class Update {
     public static Scanner sc;
     public static SelectRecords s;
-    private Connection connect() {
+    public static reservation r;
+    private static Connection connect() {
         Connection conn = null;
         try {
             // db parameters
@@ -26,16 +28,16 @@ public class Update {
         return conn;
     }
 
-    public void update_dispo() {
+    public static void update_dispo() {
         s=new SelectRecords();
         String sql = "UPDATE Possede Join reservation using (num_chambre)   SET disponibilite = 0 WHERE (date_debut < DATE(NOW()) && date_fin >DATE(NOW()));";
         String sql1 = "UPDATE Possede Join reservation using (num_chambre)   SET disponibilite = 1 WHERE (date_debut > DATE(NOW()) || date_fin <DATE(NOW()));";
         try {
-            Connection conn = this.connect();
+            Connection conn = connect();
             Statement stmt = conn.createStatement();
              stmt.executeUpdate(sql);
 
-            Connection conn1 = this.connect();
+            Connection conn1 = connect();
             Statement stmt1 = conn1.createStatement();
             stmt1.executeUpdate(sql1);
             // loop through the result set
@@ -128,15 +130,30 @@ public class Update {
         }
     }
 
-    public static void update_reservation(){
+    public static void update_reservation() throws ParseException {
         s=new SelectRecords();
-
+        r=new reservation();
         System.out.println("Donnez le num de la reservation que vous voulez modifier:");
         sc=new Scanner(System.in);
         int i=sc.nextInt();
         while(i<0||i>s.selectMax("id_reservation","reservation")){
             System.out.println("Reservation inexistatnte\nDonnez le num de la reservation que vous voulez modifier:");
             i=sc.nextInt();
+        }
+        update_dispo();
+        System.out.println("Selectionne la date du debut de votre sejour ");
+        String d=sc.next();
+
+        while(!r.verifier_date(d) || !r.isNotPastDate(d)){
+            System.out.println("Selectionne la date du debut de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ ");
+            d=sc.next();
+        }
+        System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
+        String h=sc.next();
+        while(!r.verifier_date(h) || !r.estapres(h,d)){
+            System.out.println(!r.estapres(h,d));
+            System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
+            h=sc.next();
         }
     }
 
