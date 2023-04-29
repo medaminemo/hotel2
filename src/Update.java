@@ -65,33 +65,33 @@ public class Update {
             String ville = "";
             String pays = "";
             String cp = "";
-            System.out.println("what's the address ?");
+            System.out.println("Veuillez entrer votre nouvelle adresse");
             sc.nextLine();
             adresse = sc.nextLine();
             System.out.println(adresse);
             while (!v.verifier_adresse(adresse)) {
-                System.out.println("sorry there's something wrong with the adress");
+                System.out.println("Votre adresse n'est pas valable, veuillez réessayer");
                 adresse = sc.nextLine();
             }
 
-            System.out.println("where does he live (name of the city)?");
+            System.out.println("Quel est le nom de la ville ?");
             ville = sc.next();
             while (!v.verifier_prenom(ville)) {
-                System.out.println("sorry there's something wrong with the name of the city");
+                System.out.println("Veuillez ressaisir le nom de la ville s'il vous plait");
                 ville = sc.next();
             }
 
-            System.out.println("where does he live(country)?");
+            System.out.println("Quel est le nom du pays ?");
             pays = sc.next();
             while (!v.verifier_prenom(pays)) {
-                System.out.println("sorry there's something wrong with the name of the country");
+                System.out.println("Veuillez ressaisir le nom du pays s'il vous plait");
                 pays = sc.next();
             }
 
-            System.out.println("what is the address code?");
+            System.out.println("Quel est votre code postal ?");
             cp = sc.next();
             while (!v.verifier_cp(cp)) {
-                System.out.println("sorry there's something wrong with the address code");
+                System.out.println("Veuillez ressaisir le nom du pays s'il vous plait");
                 cp = sc.next();
             }
 
@@ -101,16 +101,16 @@ public class Update {
             System.out.println("LA NOUVELLE EMAIL:");
             String email=sc.next();
             while(!v.verifier_email(email)){
-                System.out.println("sorry there's something wrong with the e-mail");
+                System.out.println("Veuillez ressaisir votre e-mail s'il vous plait");
                 email=sc.next();
             }
             sql="Update client set email='"+email+"' where id_client="+id+"";
         }
         else {
-            System.out.println("VOTRE NOUVEAUX NUMERO?");
+            System.out.println("Veuillez reseigner votre nouveau numéro de téléphone:");
             String tel=sc.next();
             while(!v.verifier_tel(tel)){
-                System.out.println("sorry there's something wrong with the phone number");
+                System.out.println("Veuillez ressaisir votre numéro de téléphone s'il vous plait");
                 tel=sc.next();
             }
             sql="update client set tel_client='"+tel+" where id_client="+id;
@@ -133,7 +133,7 @@ public class Update {
     public static void update_reservation() throws ParseException {
         s=new SelectRecords();
         r=new reservation();
-        System.out.println("Donnez le num de la reservation que vous voulez modifier:");
+        System.out.println("Donnez le numéro de la reservation que vous voulez modifier:");
         sc=new Scanner(System.in);
         int i=sc.nextInt();
         while(i<0||i>s.selectMax("id_reservation","reservation")){
@@ -161,11 +161,11 @@ public class Update {
     {
         s=new SelectRecords();
 
-        System.out.println("Donnez le num de la reservation que vous voulez eliminer:");
+        System.out.println("Donnez le num de la reservation que vous voulez supprimer:");
         sc=new Scanner(System.in);
         int i=sc.nextInt();
         while(i<0||i>s.selectMax("id_reservation","reservation")){
-            System.out.println("Reservation inexistatnte\nDonnez le num de la reservation que vous voulez eliminer:");
+            System.out.println("Reservation inexistatnte\nDonnez le num de la reservation que vous voulez supprimer:");
             i=sc.nextInt();
         }
         String sql = "DELETE FROM Reservation WHERE id_reservation = "+i;
@@ -189,11 +189,11 @@ public class Update {
     {
         s=new SelectRecords();
 
-        System.out.println("Donnez le num du client a eliminer:");
+        System.out.println("Donnez le numéro de la reservation que vous souhaitez supprimer:");
         sc=new Scanner(System.in);
         int i=sc.nextInt();
         while(i<0||i>s.selectMax("id_client","client")){
-            System.out.println("client inexistatnte\nDonnez le num du client que vous voulez eliminer:");
+            System.out.println("Reservation inexistatnte\nDonnez le numéro de la reservation que vous souhaitez supprimer:");
             i=sc.nextInt();
         }
         String sql = "DELETE FROM Reservation WHERE id_reservation = "+i;

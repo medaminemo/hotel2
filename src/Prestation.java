@@ -30,16 +30,17 @@ public class Prestation {
         public static void ajout_prestation(int w) throws IOException {
             sc= new Scanner(System.in);
             i=new InsertRecords();
-            System.out.println("Est ce que vous voulez decouvrir nos prestation");
+            System.out.println("Veuillez taper (oui) si vous souhaitez ajouter  nos prestation à votre séjour sinon tapez (non)");
             String c=sc.next();
             s=new SelectRecords();
             int x=c.compareTo("oui");
             if ( x==0){
                 String k=s.select_prestation();
+                System.out.println("voici la liste de nos prestations");
                 System.out.println(k);
-                System.out.println("De que est que vous voulez beneficier(Inserez le num de la prestation):");
+                System.out.println("Lesquelles souhaitez vous ? (Veuillez taper le numéro de la prestation):");
                 x=sc.nextInt();
-                while (!(x>1&&x<5)){
+                while (!(x>=1&&x<5)){
                     System.out.println("De que est que vous voulez beneficier(Inserez le num de la prestation entre 1 et 5):");
                     x=sc.nextInt();
                 }

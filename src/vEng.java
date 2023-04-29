@@ -41,66 +41,67 @@ public class vEng {
 
     public static int newclient(){
         sc = new Scanner(System.in);
-        System.out.println("what's his/her name ?");
+        System.out.println("Quelle est votre nom?");
         String last_name=sc.next();
         while(!verifier_prenom(last_name)){
-            System.out.println("sorry there's something wrong with the last name");
+            System.out.println("Veuillez ressaisir votre prénom s'il vous plait");
             last_name=sc.next();
         }
 
-        System.out.println("what's his name ?");
+        System.out.println("Quel est votre nom ?");
         String name=sc.next();
         while(!verifier_prenom(name)){
-            System.out.println("sorry there's something wrong with the name");
+            System.out.println("Veuillez ressaisir votre nom s'il vous plait");
             name=sc.next();
         }
 
-        System.out.println("what's the address ?");
+        System.out.println("Quelle est votre adresse ?");
         sc.nextLine();
         String adresse=sc.nextLine();
         System.out.println(adresse);
         while(!verifier_adresse(adresse)){
-            System.out.println("sorry there's something wrong with the adress");
+            System.out.println("Veuillez ressaisir votre adresse s'il vous plait");
             adresse=sc.nextLine();
         }
 
-        System.out.println("where does he live (name of the city)?");
+        System.out.println("Quel est le nom de la ville ?");
         String ville=sc.next();
         while(!verifier_prenom(ville)){
-            System.out.println("sorry there's something wrong with the name of the city");
+            System.out.println("Veuillez ressaisir le nom de la ville s'il vous plait");
             ville=sc.next();
         }
 
-        System.out.println("where does he live(country)?");
+        System.out.println("Quel est le nom du pays ?");
         String pays=sc.next();
         while(!verifier_prenom(pays)){
-            System.out.println("sorry there's something wrong with the name of the city");
+            System.out.println("Veuillez ressaisir le nom de la ville s'il vous plait");
             ville=sc.next();
         }
 
         System.out.println("what is the address code?");
         String cp=sc.next();
         while(!verifier_cp(cp)){
-            System.out.println("sorry there's something wrong with the address code");
+            System.out.println("Veuillez ressaisir le nom du pays s'il vous plait");
             cp=sc.next();
         }
 
-        System.out.println("what is the e-mail?");
+        System.out.println("Veuillez reseigner votre email");
         String email=sc.next();
         while(!verifier_email(email)){
-            System.out.println("sorry there's something wrong with the e-mail");
+            System.out.println("Veuillez ressaisir votre e-mail s'il vous plait");
             email=sc.next();
         }
 
-        System.out.println("what is the phone number?");
+        System.out.println("Quel est votre numéro de téléphone ?");
         String tel=sc.next();
         while(!verifier_tel(tel)){
-            System.out.println("sorry there's something wrong with the phone number");
+            System.out.println("Veuillez ressaisir votre numéro de téléphone s'il vous plait");
             tel=sc.next();
         }
         InsertRecords app = new InsertRecords();
         SelectRecords select = new SelectRecords();
         int id=select.selectMax("id_client","client");
+        System.out.println("voici votre numéro d'identificaation: "+id);
         app.insert_client(last_name,name,adresse,ville,cp,pays,email,tel);
         return id;
 
