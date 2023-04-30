@@ -26,6 +26,7 @@ import java.util.Scanner;
           r= new vEng();
           u=new Update();
 
+
           int f=0;
           int l=0;
          f=s.selectMax("id_client","client");
@@ -60,24 +61,26 @@ import java.util.Scanner;
                  System.out.println("id non trouve,Insert your id code:");
                  id = sc.nextInt();
              }
-             System.out.println("----->"+id);
-
-             System.out.println("vous etes  :"+s.selectclient(id));
-             System.out.println("Si c'est vous tapez 1 Sinon il faut vois inscrire dans notre base tapez 2 alors ");
-             int t=sc.nextInt();
-             int p=0;
-
-             if(t!=1){
-                 vEng v=new vEng();
-                 p=v.newclient();
-                 l=res.reserver(p);
+            String client=s.selectclient(id);
+             System.out.println("Bienvenu,  "+client+"  si c'est vous tapez le mot de passe sinon tapez 0 pour vous inscrire ");
+             System.out.println("Inserez le mot de passe:");
+             String mdp_t=sc.next();
+             String mdp_c=s.select_mdp(id);
+             while(mdp_c.compareTo(mdp_t)!=0 || mdp_t=="0"){
+                System.out.println("Mot de passe erronée");
+                mdp_t=sc.next();
              }
+             int p=0;
+             if(mdp_t=="0"){
+                 p=r.newclient();
+             }
+
+
          }
 
 
          System.out.println("TYPE 1 IF YOU WANT TO BOOK IN OUR HOTEL \n     2 IF YOU WANT TO UPDATE YOUR PERSONAL DATA \n 3 IF YOU WANT TO UPDATE YOUR RESERVATION \n     4 IF YOU WANT TO DELETE YOUR DATA IN OUR DATABASE \n 5 CANCEL THE RESERVATION");
          int o=sc.nextInt();
-         System.out.println(id);
          Update u =new Update();
 
          u.update_dispo();

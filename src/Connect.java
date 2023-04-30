@@ -11,10 +11,10 @@ public class Connect {
 		Connection conn = null;
 		try {
 			// db parameters
-			String url = "jdbc:mysql://localhost:3307/hotel";
+			String url = "jdbc:mysql://localhost:3306/hotel";
 			// create a connection to the database
-			String username = "amine";
-			String password = "amine";
+			String username = "root";
+			String password = "";
 			conn = DriverManager.getConnection(url, username, password);
 
 

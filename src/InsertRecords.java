@@ -6,10 +6,10 @@
             Connection conn = null;
             try {
                 // db parameters
-                String url = "jdbc:mysql://localhost:3307/hotel";
+                String url = "jdbc:mysql://localhost:3306/hotel";
                 // create a connection to the database
-                String username = "amine";
-                String password = "amine";
+                String username = "root";
+                String password = "";
                 conn = DriverManager.getConnection(url, username, password);
 
 
@@ -32,8 +32,8 @@
            }
        }
 
-        public void insert_facture(int x,String s){
-            String sql="Insert into facture (id_reservation,nom_prestation) values("+x+",'"+s+"')";
+        public void insert_facture(int x,String s,int p){
+            String sql="Insert into facture (id_reservation,nom_prestation,nb_personnes) values("+x+",'"+s+"',"+p+")";
             try{
                 Connection conn = this.connect();
                 PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -43,12 +43,12 @@
                 System.out.println(e.getMessage());
             }
         }
-        public void insert_client(String nom_client, String prenom_client,String adresse_client,String ville_client,String cp,String pays_client,String email_client,String tel_client) {
+        public void insert_client(String nom_client, String prenom_client,String adresse_client,String ville_client,String cp,String pays_client,String email_client,String tel_client, String mdp) {
             SelectRecords app = new SelectRecords();
             int id=app.selectMax("id_client","client")+1;
 
 
-            String sql = "INSERT INTO client(id_client,nom_client,prenom_client,adresse_client,ville_client,cp_client,pays_client,email_client,tel_client) VALUES ('"+id+"','"+nom_client+"','"+prenom_client+"','"+adresse_client+"','"+ville_client+"','"+cp+"','"+pays_client+"','"+email_client+"','"+tel_client+"');";
+            String sql = "INSERT INTO client(id_client,nom_client,prenom_client,adresse_client,ville_client,cp_client,pays_client,email_client,tel_client,password) VALUES ('"+id+"','"+nom_client+"','"+prenom_client+"','"+adresse_client+"','"+ville_client+"','"+cp+"','"+pays_client+"','"+email_client+"','"+tel_client+"','"+mdp+"');";
             try{
                 Connection conn = this.connect();  
                 PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -62,7 +62,7 @@
         public static void main(String[] args) {  
        
             InsertRecords app = new InsertRecords();  
-            app.insert_facture(4,"SPA");
+            //app.insert_facture(4,"SPA");
 
         }
        

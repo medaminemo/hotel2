@@ -10,6 +10,9 @@
     import java.sql.SQLException;
     import java.sql.Statement;
     import java.io.IOException;
+    import java.time.LocalDate;
+    import java.time.temporal.ChronoUnit;
+
     import org.apache.pdfbox.pdmodel.PDDocument;
     import org.apache.pdfbox.pdmodel.PDPage;
     import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -23,10 +26,10 @@
             Connection conn = null;
             try {
                 // db parameters
-                String url = "jdbc:mysql://localhost:3307/hotel";
+                String url = "jdbc:mysql://localhost:3306/hotel";
                 // create a connection to the database
-                String username = "amine";
-                String password = "amine";
+                String username = "root";
+                String password = "";
                 conn = DriverManager.getConnection(url, username, password);
 
 
@@ -142,110 +145,110 @@
             }
             return hotel;
         }
-        public void select_facture(int w) throws IOException {
-            File file = new File("C:\\Users\\Amine\\OneDrive\\Immagini\\b&b.jpg");
-            String sql="Select nom_client,prenom_client,num_chambre,nom_hotel,date_debut,date_fin from reservation join client using (id_client) join possede using (num_chambre) join hotel using (id_hotel) where id_reservation="+w+" ; ";
-            String nom="";
-            String prenom="";
-            int numch=0;
-            String nomh ="";
-            String dated="";
-            String datef="";
-            String prestation="";
-
-            String sql1="select nom_prestation from facture where id_reservation="+w+";";
+        public String select_mdp(int id) throws IOException {
+            String sql="select password from client where id_client="+id;
+            String mdp="";
             try {
                 Connection conn = this.connect();
                 Statement stmt  = conn.createStatement();
                 ResultSet rs    = stmt.executeQuery(sql);
 
-                Connection conn1 = this.connect();
-                Statement stmt1  = conn1.createStatement();
-                ResultSet rs1    = stmt1.executeQuery(sql1);
                 // loop through the result set
                 //if (rs.next()) {
                 //  max = rs.getInt(1);
                 //}
-                while (rs1.next()){
-                    prestation=prestation+rs1.getString("nom_prestation")+"\n";
+                if(rs.next()){
+                    mdp=rs.getString("password");
                 }
-                System.out.println(prestation);
-
-                while(rs.next()){
-
-                    nom=rs.getString("nom_client");
-                    prenom=rs.getString("prenom_client");
-                    nomh=rs.getString("nom_hotel");
-                    numch=rs.getInt("num_chambre");
-                    dated=rs.getString("date_debut");
-                    datef=rs.getString("date_fin");
-
-                }
-                    System.out.println(nomh);
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
 
             }
-            try {
-                // Create a document object
-                PDDocument doc = new PDDocument();
-
-                // Create a page object
-                PDPage page = new PDPage();
-
-                // Add the page to the document
-                doc.addPage(page);
-
-                // Create an image object from the loaded image
-                PDImageXObject img = PDImageXObject.createFromFileByContent(file, doc);
-
-                // Create a content stream for the page
-                PDPageContentStream contentStream = new PDPageContentStream(doc, page);
-
-                // Draw the image on the page at position (0, 0) with width and height of the image
-                PDFont font = PDType1Font.TIMES_BOLD;
-                contentStream.setLeading(30);
-                contentStream.drawImage(img, page.getMediaBox().getWidth() - 100, page.getMediaBox().getHeight() - 100, 100, 100);
-                contentStream.beginText();
-                contentStream.setFont(font, 12);
-                contentStream.setNonStrokingColor(Color.black);
-                contentStream.newLineAtOffset(50, 700); // Adjust the offset to position the text as desired
-
-                // Add the title "Facture"
-                contentStream.showText("Facture de Mr/Mme "+nom+" "+prenom);
-
-                contentStream.newLineAtOffset(0, -30);
-
-                contentStream.showText("Chambre reserve: "+numch+" dans l'hotel: "+nomh);
-                contentStream.newLineAtOffset(0, -30);
-
-                contentStream.showText("Pour une periode du "+dated+" au "+datef);
-                contentStream.newLineAtOffset(0, -30);
-
-                contentStream.showText("Prestation Reservee:"+prestation);
-                contentStream.endText();
-
-                // Close the content stream
-                contentStream.close();
-
-                // Save the document to a file
-                doc.save("C:\\Users\\Amine\\OneDrive\\Documents\\hotel2\\test.pdf");
-
-                // Close the document
-                doc.close();
-
-                System.out.println("PDF created successfully!");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            return mdp;
         }
-        /** 
-         * @param args the command line arguments 
-         */  
+        public static int nbjour(String date1, String date2){
+            LocalDate localDate1 = LocalDate.parse(date1);
+            LocalDate localDate2 = LocalDate.parse(date2);
+            return (int) ChronoUnit.DAYS.between(localDate1, localDate2);
+        }
+        public void select_facture(int w) throws IOException {
+            File file = new File("C:\\Users\\Amine\\OneDrive\\Immagini\\b&b.jpg");
+            String sql = "Select nom_client,prenom_client,adresse_client,ville_client,cp_client,num_chambre,prix_chambre,nom_hotel,date_debut,date_fin from reservation join client using (id_client) join possede using (num_chambre) join chambre using (num_chambre) join type_chambre using (capacite) join hotel using (id_hotel) where id_reservation=" + w + " ; ";
+            String nom = "";
+            String prenom = "";
+            int numch = 0;
+            String nomh = "";
+            String dated = "";
+            String datef = "";
+            String prestation = "";
+            String datefact = "";
+            String adresse = "";
+            String ville = "";
+            String cp = "";
+            String prix = "";
+            String nb_personnes="";
+            String tarif="";
+
+            String sql1 = "select nom_prestation,date_facture,nb_personnes,tarif_prestation from facture join prestation using (nom_prestation) where id_reservation=" + w + ";";
+            try {
+                Connection conn = this.connect();
+                Statement stmt = conn.createStatement();
+                ResultSet rs = stmt.executeQuery(sql);
+
+                Connection conn1 = this.connect();
+                Statement stmt1 = conn1.createStatement();
+                ResultSet rs1 = stmt1.executeQuery(sql1);
+                // loop through the result set
+                //if (rs.next()) {
+                //  max = rs.getInt(1);
+                //}
+                while (rs1.next()) {
+                    prestation = prestation + rs1.getString("nom_prestation") + "                 "+rs1.getString("nb_personnes")+"                          "+rs1.getString("tarif_prestation")+"\n";
+                    datefact = rs1.getString("date_facture");
+
+                }
+                System.out.println(tarif);
+
+                while (rs.next()) {
+
+                    nom = rs.getString("nom_client");
+                    prenom = rs.getString("prenom_client");
+                    nomh = rs.getString("nom_hotel");
+                    numch = rs.getInt("num_chambre");
+                    dated = rs.getString("date_debut");
+                    datef = rs.getString("date_fin");
+                    adresse = rs.getString("adresse_client");
+                    ville = rs.getString("ville_client");
+                    cp = rs.getString("cp_client");
+                    prix = rs.getString("prix_chambre");
+                }
+                System.out.println(nomh);
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            }
+
+            int nbjour = nbjour(dated, datef);
+
+            System.out.println("Facture de M/Mme: " + nom + " " + prenom + "                      Date de Facture: " + datefact);
+            System.out.println("Resident a :" + adresse + " " + ville + "," + cp);
+            System.out.println("                                                                                     ");
+            System.out.println("Nb de jours             Chambre reserve                      Prix par jour");
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println(nbjour + "                       N " + numch + " au " + nomh + "                   " + prix);
+            System.out.println("                                                                                     ");
+            System.out.println("LES PRESTATION:");
+            System.out.println("Type Prestation         Quantite                   Prix");
+            System.out.println("--------------------------------------------------------------------------------------------");
+            System.out.println(prestation);
+
+
+
+        }
+
         public static void main(String[] args) throws IOException {
             SelectRecords app = new SelectRecords();
-            app.select_facture(6);
-
+            app.select_facture(7);
         }
        
     }  

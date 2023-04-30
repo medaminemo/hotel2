@@ -8,22 +8,22 @@ public class Prestation {
 
 
 
-        public static  void switc(int x,int w){
+        public static  void switc(int x,int w,int p){
             switch (x){
                 case 1:
-                    i.insert_facture(w,"Dejeuner");
+                    i.insert_facture(w,"Dejeuner",p);
                     break;
                 case 2:
-                    i.insert_facture(w,"Internet");
+                    i.insert_facture(w,"Internet",p);
                     break;
                 case 3:
-                    i.insert_facture(w,"Parking");
+                    i.insert_facture(w,"Parking",p);
                     break;
                 case 4:
-                    i.insert_facture(w,"Piscine");
+                    i.insert_facture(w,"Piscine",p);
                     break;
                 case 5:
-                    i.insert_facture(w,"Dejeuner");
+                    i.insert_facture(w,"Dejeuner",p);
                     break;
             }
         }
@@ -34,6 +34,7 @@ public class Prestation {
             String c=sc.next();
             s=new SelectRecords();
             int x=c.compareTo("oui");
+            int p=0;
             if ( x==0){
                 String k=s.select_prestation();
                 System.out.println("voici la liste de nos prestations");
@@ -44,7 +45,13 @@ public class Prestation {
                     System.out.println("De que est que vous voulez beneficier(Inserez le num de la prestation entre 1 et 5):");
                     x=sc.nextInt();
                 }
-                switc(x,w);
+                System.out.println("Selectionne le num de personnes qui vont benefier de la prestation");
+                p=sc.nextInt();
+                while (p<=0){
+                    System.out.println("Selectionne le num de personnes qui vont benefier de la prestation");
+                    p=sc.nextInt();
+                }
+                switc(x,w,p);
                 System.out.println("Est ce que vous voulez rajouter autre chose?");
                 c=sc.next();
                 x=c.compareTo("oui");
@@ -55,7 +62,13 @@ public class Prestation {
                         System.out.println("De que est que vous voulez beneficier(Inserez le num de la prestation entre 1 et 5):");
                         x=sc.nextInt();
                     }
-                    switc(x,w);
+                    System.out.println("Selectionne le num de personnes qui vont benefier de la prestation");
+                    p=sc.nextInt();
+                    while (p<=0){
+                        System.out.println("Selectionne le num de personnes qui vont benefier de la prestation");
+                        p=sc.nextInt();
+                    }
+                    switc(x,w,p);
                     System.out.println("Est ce que vous voulez rajouter autre chose?");
                     c=sc.next();
                     x=c.compareTo("oui");
