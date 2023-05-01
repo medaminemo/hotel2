@@ -56,6 +56,7 @@ public class reservation {
             System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
             h=sc.next();
         }
+        //ICI
         InsertRecords p=new InsertRecords();
         p.insert_reservation(i,id,d,h,x);
 
