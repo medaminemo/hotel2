@@ -10,6 +10,7 @@
     import java.sql.SQLException;
     import java.sql.Statement;
     import java.io.IOException;
+    import java.text.ParseException;
     import java.time.LocalDate;
     import java.time.temporal.ChronoUnit;
 
@@ -45,6 +46,25 @@
 
         public int selectMax(String nom_colonne,String nom_table){
             String sql="SELECT max("+nom_colonne+") from "+nom_table+";";
+
+            int max=-1;
+            try {
+                Connection conn = this.connect();
+                Statement stmt  = conn.createStatement();
+                ResultSet rs    = stmt.executeQuery(sql);
+
+                // loop through the result set
+                if (rs.next()) {
+                    max = rs.getInt(1);
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            }
+            return max;
+        }
+        public int selectNumChambre(int x){
+            String sql="SELECT count(id_hotel) from possede where id_hotel="+x;
 
             int max=-1;
             try {
@@ -146,7 +166,7 @@
             return hotel;
         }
         public String select_mdp(int id) throws IOException {
-            String sql="select password from client where id_client="+id;
+            String sql="select mdp from client where id_client="+id;
             String mdp="";
             try {
                 Connection conn = this.connect();
@@ -158,7 +178,7 @@
                 //  max = rs.getInt(1);
                 //}
                 if(rs.next()){
-                    mdp=rs.getString("password");
+                    mdp=rs.getString("mdp");
                 }
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
@@ -246,9 +266,41 @@
 
         }
 
+        public boolean verifier_dispo(String date1, String date2, int num_chambre, int num_hotel){
+            reservation r=new reservation();
+            boolean res=false;
+            String sql="Select date_debut,date_fin from reservation join possede using (num_chambre) where num_chambre="+num_chambre+" and id_hotel="+num_hotel+" and disponibilite=1";
+            try {
+                Connection conn = this.connect();
+                Statement stmt  = conn.createStatement();
+                ResultSet rs    = stmt.executeQuery(sql);
+                String date_debut="";
+                String date_fin="";
+                if (rs.next()) {
+                    date_debut = rs.getString("date_debut");
+                    date_fin = rs.getString("date_fin");
+                    boolean valid = r.estapres(date1, date_fin) || r.estapres(date_debut, date2);
+                    while (rs.next() && !valid) {
+                        date_debut = rs.getString("date_debut");
+                        date_fin = rs.getString("date_fin");
+                        valid = r.estapres(date1,date_fin) || r.estapres(date_debut, date2);
+                    }
+                    res = !rs.next() && valid;
+                } else {
+                    res = true; // aucun conflit d'horaire
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            return res ;
+        }
+
         public static void main(String[] args) throws IOException {
             SelectRecords app = new SelectRecords();
-            app.select_facture(7);
+            System.out.println(app.verifier_dispo("2023-04-20","2023-05-22",5,1));
         }
        
     }  

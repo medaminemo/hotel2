@@ -13,7 +13,7 @@ public class Update {
         Connection conn = null;
         try {
             // db parameters
-            String url = "jdbc:mysql://localhost:3067/hotel";
+            String url = "jdbc:mysql://localhost:3306/hotel";
             // create a connection to the database
             String username = "root";
             String password = "";
@@ -35,7 +35,7 @@ public class Update {
         try {
             Connection conn = connect();
             Statement stmt = conn.createStatement();
-             stmt.executeUpdate(sql);
+            stmt.executeUpdate(sql);
 
             Connection conn1 = connect();
             Statement stmt1 = conn1.createStatement();
@@ -213,6 +213,7 @@ public class Update {
     }
     public static void main(String args[]){
         Update p=new Update();
-        //p.update_client();
+        p.update_dispo();
+
     }
 }

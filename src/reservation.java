@@ -31,34 +31,54 @@ public class reservation {
         }
     }
 
+
     public static int reserver(int id ) throws ParseException {
-        sc=new Scanner(System.in);
+        sc = new Scanner(System.in);
         s = new SelectRecords();
-        int i=s.selectMax("id_reservation","reservation")+1;
+        int i = s.selectMax("id_reservation", "reservation") + 1;
         System.out.println("Donnez le num de l'hotel ou vous voulez reserver");
         System.out.println(s.selecthotel());
-        int x=sc.nextInt();
+
+        int x = sc.nextInt();
+        while (x < 1 || x > 4) {
+            System.out.println("Donnez le num de l'hotel ou vous voulez reserver");
+            System.out.println(s.selecthotel());
+            x = sc.nextInt();
+        }
+        System.out.println("Donnez le le numero de la chambre que vous voulez reserver");
         System.out.println(s.selectchambre(x));
-        x=sc.nextInt();
-
-        System.out.println("Selectionne la date du debut de votre sejour ");
-        String d=sc.next();
-
-        while(!verifier_date(d) || !isNotPastDate(d)){
-            System.out.println("Selectionne la date du debut de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ ");
-            d=sc.next();
+        int chambre = sc.nextInt();
+        int max_c = s.selectNumChambre(x);
+        while (chambre < 0 || chambre > max_c) {
+            System.out.println("Donnez le le numero de la chambre que vous voulez reserver");
+            System.out.println(s.selectchambre(x));
+            chambre = sc.nextInt();
         }
+        boolean verification = false;
+        String d;
+        String h;
+        do {
+            System.out.println("Selectionne la date du debut de votre sejour ");
+            d = sc.next();
 
-        System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
-        String h=sc.next();
-        while(!verifier_date(h) || !estapres(h,d)){
-            System.out.println(!estapres(h,d));
+            while (!verifier_date(d) || !isNotPastDate(d)) {
+                System.out.println("Selectionne la date du debut de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ ");
+                d = sc.next();
+            }
+
             System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
-            h=sc.next();
-        }
+            h = sc.next();
+            while (!verifier_date(h) || !estapres(h, d)) {
+                System.out.println(!estapres(h, d));
+                System.out.println("Selectionne la date du fin de votre sejour\n ATTENTION IL FAUT QUE LA DATE SOIT SUR CE FORMAT: AAAA-MM-JJ\n ET IL FAUT QUE LA DATE SOIT PLUS TARD DE LA PREMIERE ");
+                h = sc.next();
+            }
+            verification = s.verifier_dispo(d, h, chambre, x);
+        } while (verification == false);
         //ICI
-        InsertRecords p=new InsertRecords();
-        p.insert_reservation(i,id,d,h,x);
+
+        InsertRecords p = new InsertRecords();
+        p.insert_reservation(i, id, d, h, x);
 
 
         return i;

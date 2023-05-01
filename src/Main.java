@@ -66,6 +66,7 @@ import java.util.Scanner;
              System.out.println("Inserez le mot de passe:");
              String mdp_t=sc.next();
              String mdp_c=s.select_mdp(id);
+             System.out.println(mdp_c);
              while(mdp_c.compareTo(mdp_t)!=0 || mdp_t=="0"){
                 System.out.println("Mot de passe erronée");
                 mdp_t=sc.next();
@@ -79,32 +80,31 @@ import java.util.Scanner;
          }
 
 
-         System.out.println("TYPE 1 IF YOU WANT TO BOOK IN OUR HOTEL \n     2 IF YOU WANT TO UPDATE YOUR PERSONAL DATA \n 3 IF YOU WANT TO UPDATE YOUR RESERVATION \n     4 IF YOU WANT TO DELETE YOUR DATA IN OUR DATABASE \n 5 CANCEL THE RESERVATION");
+         System.out.println("TYPE 1 IF YOU WANT TO BOOK IN OUR HOTEL \n     2 IF YOU WANT TO UPDATE YOUR PERSONAL DATA \n 3 IF YOU WANT TO UPDATE YOUR RESERVATION \n     4 IF YOU WANT TO DELETE YOUR DATA IN OUR DATABASE \n 5 CANCEL THE RESERVATION\n6 POUR CE DECONNECTER");
          int o=sc.nextInt();
          Update u =new Update();
+        while(o!=6) {
+            u.update_dispo();
+            while (o < 1 || o > 5) {
+                System.out.println("TYPE 1 IF YOU WANT TO BOOK IN OUR HOTEL \n     2 IF YOU WANT TO UPDATE YOUR PERSONAL DATA \n 3 IF YOU WANT TO UPDATE YOUR RESERVATION \n     4 IF YOU WANT TO DELETE YOUR DATA IN OUR DATABASE \n 5 CANCEL THE RESERVATION");
+                o = sc.nextInt();
+            }
+            if (o == 1) {
+                System.out.println(id);
+                l = res.reserver(id);
+                Prestation p = new Prestation();
+                p.ajout_prestation(l);
 
-         u.update_dispo();
-         while (o<1||o>5){
-             System.out.println("TYPE 1 IF YOU WANT TO BOOK IN OUR HOTEL \n     2 IF YOU WANT TO UPDATE YOUR PERSONAL DATA \n 3 IF YOU WANT TO UPDATE YOUR RESERVATION \n     4 IF YOU WANT TO DELETE YOUR DATA IN OUR DATABASE \n 5 CANCEL THE RESERVATION");
-             o=sc.nextInt();
-         }
-         if (o==1){
-             System.out.println(id);
-             l=res.reserver(id);
-             Prestation p=new Prestation();
-             p.ajout_prestation(l);
-
-         }
-         else if(o==2){
-             u.update_client(id);
-         }else if (o==3){
-            u.update_reservation();
-         }else if (o==4){
-            u.delete_client();
-         }
-         else{
-            u.delete_reservation();
-         }
+            } else if (o == 2) {
+                u.update_client(id);
+            } else if (o == 3) {
+                u.update_reservation();
+            } else if (o == 4) {
+                u.delete_client();
+            } else {
+                u.delete_reservation();
+            }
+        }
 
 
 
